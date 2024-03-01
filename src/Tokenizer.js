@@ -1,7 +1,17 @@
 class Tokenizer {
+  constructor() {
+    this._string = ''
+    this._cursor = 0
+  }
+
   init(string) {
     this._string = string
     this._cursor = 0
+  }
+
+  // is End Of File
+  isEOF() {
+    return this._cursor === this._string.length
   }
 
   hasMoreTokens() {
@@ -29,9 +39,29 @@ class Tokenizer {
         value: Number(number),
       }
     }
+
+    // String
+    if (string[0] === '"') {
+      let s = '';
+
+      do {
+        s += string[this._cursor++]
+      } while (string[this._cursor] !== '"' && !this.isEOF())
+      
+      // skip the ending quote `"hello"` => "hello6
+      s+= this._cursor++;
+
+      return {
+        type: 'STRING',
+        value: s,
+      }
+    }
+
+
+    return null
   }
 }
 
-module.epxorts = {
+module.exports = {
   Tokenizer,
 }

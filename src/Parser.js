@@ -1,7 +1,5 @@
 const { Tokenizer } = require('./Tokenizer')
 
-
-
 class Parser {
   constructor() {
     this._tokenizer = new Tokenizer()
@@ -9,6 +7,9 @@ class Parser {
 
   parse(string) {
     this._string = string
+    this._tokenizer.init(string)
+
+    this._lookahead = this._tokenizer.getNextToken()
 
     return this.Program()
   }
@@ -16,15 +17,55 @@ class Parser {
   Program() {
     return {
       type: 'Program',
-      body: this.NumericLiteral(),
+      body: this.Literal(),
     }
   }
 
+  Literal() {
+    switch (this._lookahead.type) {
+      case 'NUMBER':
+        return this.NumericLiteral()
+      case 'STRING':
+        return this.StringLiteral()
+    }
+
+    throw new SyntaxError('Unexpected token: ' + this._lookahead.value)
+  }
+
   NumericLiteral() {
+    const token = this._eat('NUMBER')
+
     return {
       type: 'NumericLiteral',
-      value: Number(this._string),
+      value: Number(token.value),
     }
+  }
+
+  StringLiteral() {
+    const token = this._eat('STRING')
+
+    return {
+      type: 'StringLiteral',
+      value: token.value.slice(1, -1)
+    }
+  }
+
+  _eat(type) {
+    const token = this._lookahead
+
+    if (token == null) {
+      throw new SyntaxError(`Unexpected end of input, expected ${type}`)
+    }
+
+    if (token.type !== type) {
+      throw new SyntaxError(
+        `Unexpected token: "${token.value}", expected: "${type}"`
+      )
+    }
+
+    this._lookahead = this._tokenizer.getNextToken()
+
+    return token
   }
 }
 
