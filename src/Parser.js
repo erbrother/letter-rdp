@@ -17,8 +17,36 @@ class Parser {
   Program() {
     return {
       type: 'Program',
-      body: this.Literal(),
+      body: this.StatementList(),
     }
+  }
+
+  StatementList() {
+    const statementList = [this.Statement()]
+
+    while (this._lookahead != null) {
+      statementList.push(this.Statement());
+    }
+
+    return statementList;
+  }
+
+  Statement() {
+    return this.ExpressionStatement()
+  }
+
+  ExpressionStatement() {
+    const expression = this.Expression()
+    this._eat(';')
+
+    return {
+      type: 'ExpressionStatement',
+      expression
+    }
+  }
+
+  Expression() {
+    return this.Literal()
   }
 
   Literal() {
@@ -31,6 +59,8 @@ class Parser {
 
     throw new SyntaxError('Unexpected token: ' + this._lookahead.value)
   }
+
+
 
   NumericLiteral() {
     const token = this._eat('NUMBER')
