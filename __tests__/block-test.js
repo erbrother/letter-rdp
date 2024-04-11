@@ -8,28 +8,28 @@ module.exports = (test) => {
     }
   `,
     {
-      type: "Program",
+      type: 'Program',
       body: [
         {
-          type: "BlockStatement",
+          type: 'BlockStatement',
           body: [
             {
-              type: "ExpressionStatement",
+              type: 'ExpressionStatement',
               expression: {
-                type: "NumericLiteral",
+                type: 'NumericLiteral',
                 value: 42,
               },
             },
             {
-              type: "ExpressionStatement",
+              type: 'ExpressionStatement',
               expression: {
-                type: "StringLiteral",
-                value: "hello",
+                type: 'StringLiteral',
+                value: 'hello',
               },
             },
           ],
         },
       ],
-    },
-  );
-};
+    }
+  )
+}

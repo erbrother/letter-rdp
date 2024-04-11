@@ -1,5 +1,5 @@
-const { Parser } = require("../src/Parser.js");
-const assert = require("assert");
+const { Parser } = require('../src/Parser.js')
+const assert = require('assert')
 
 /**
  * List of tests
@@ -10,38 +10,33 @@ const tests = [
   // require("./statement-list-test.js"),
   // require("./block-test.js"),
   // require("./empty-statement-test.js"),
-  require("./math-test.js"),
-];
+  // require('./math-test.js'),
+  require('./assignment-test.js'),
+]
 
-const parser = new Parser();
+const parser = new Parser()
 
 function exec() {
-  const program = ` 
-  /**
-   *  "Hello, World!
-   */         
-  " 52";
-  
-  // number:
-  42;
-`;
+  const program = `
+  x = x + 10;
+`
 
-  const ast = parser.parse(program);
+  const ast = parser.parse(program)
 
-  console.log(JSON.stringify(ast, null, 2));
+  console.log(JSON.stringify(ast, null, 2))
 }
 
 function test(program, expected) {
-  const ast = parser.parse(program);
+  const ast = parser.parse(program)
 
-  assert.deepEqual(ast, expected);
+  assert.deepEqual(ast, expected)
 }
 
-console.log("Running tests...");
+console.log('Running tests...')
 
-tests.forEach((testRun) => testRun(test));
+tests.forEach((testRun) => testRun(test))
 
-console.log("success !!!");
+console.log('success !!!')
 
 // Manual test
-// exec()
+exec()

@@ -1,10 +1,10 @@
 module.exports = (test) => {
-  test(";", {
-    type: "Program",
+  test(';', {
+    type: 'Program',
     body: [
       {
-        type: "EmptyStatement",
+        type: 'EmptyStatement',
       },
     ],
-  });
-};
+  })
+}
