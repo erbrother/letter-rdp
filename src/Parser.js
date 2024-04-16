@@ -42,12 +42,43 @@ class Parser {
     switch (this._lookahead.type) {
       case ';':
         return this.EmptyStatement()
+      case 'if':
+        return this.IfStatement()
       case '{':
         return this.BlockStatement()
       case 'let':
         return this.VariableStatement()
       default:
         return this.ExpressionStatement()
+    }
+  }
+
+  /**
+   * IfStatement() 函数用来解析 if 语句。
+   *
+   * @returns
+   */
+  IfStatement() {
+    this._eat('if')
+
+    this._eat('(')
+
+    const test = this.Expression()
+
+    this._eat(')')
+
+    const consequent = this.Statement()
+
+    const alternate =
+      this._lookahead != null && this._lookahead.type === 'else'
+        ? this._eat('else') && this.Statement()
+        : null
+
+    return {
+      type: 'IfStatement',
+      test,
+      consequent,
+      alternate,
     }
   }
 
@@ -130,7 +161,7 @@ class Parser {
   }
 
   AssignmentExpression() {
-    const left = this.AddtiveExpression()
+    const left = this.RelationalExpression()
 
     if (!this._isAssignmentOperator(this._lookahead.type)) {
       return left
@@ -142,6 +173,17 @@ class Parser {
       left: this._checkValidAssignmentTarget(left),
       right: this.AssignmentExpression(),
     }
+  }
+
+  /**
+   * RELATIONAL_OPERATOR: '<' | '>' | '<=' | '>='
+   * 
+   * x > y
+   * 
+   * @returns 
+   */
+  RelationalExpression() {
+    return this._BinaryExpression('AddtiveExpression', 'RELATIONAL_OPERATOR')
   }
 
   /**
@@ -184,8 +226,6 @@ class Parser {
   _isAssignmentOperator(tokenType) {
     return tokenType === 'SIMPLE_ASSIGN' || tokenType === 'COMPLEX_ASSIGN'
   }
-
-  AssignmentOperator() {}
 
   AddtiveExpression() {
     return this._BinaryExpression(

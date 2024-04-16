@@ -27,6 +27,8 @@ const Spec = [
   // --------------------
   // Keywords
   [/^\blet\b/, 'let'],
+  [/^\bif\b/, 'if'],
+  [/^\belse\b/, 'else'],
 
   // --------------------
   // 1. NUMBER
@@ -39,12 +41,16 @@ const Spec = [
   // --------------------
   // Assigment operators: =, *=, /=, +=, -=,
   [/^=/, 'SIMPLE_ASSIGN'],
-  [/^[\*\/\+\-]/, 'COMPLEX_ASSIGN'],
+  [/^[\*\/\+\-]=/, 'COMPLEX_ASSIGN'],
 
   // --------------
   // Math operators: + , -, *, /,
   [/^[+\-]/, 'ADDITIVE_OPERATOR'],
   [/^[*\/]/, 'MULTIPLICATIVE_OPERATOR'],
+
+  // --------------
+  // Relational operators: <, >, <=, >=
+  [/^[><]=?/, 'RELATIONAL_OPERATOR'],
 
   // --------------------
   // 2. STRING
