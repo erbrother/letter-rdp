@@ -9,16 +9,16 @@ module.exports = (test) => {
           operator: '=',
           left: {
             type: 'Identifier',
-            name: 'x',
+            name: 'x'
           },
           right: {
             type: 'NumericLiteral',
-            value: 42,
-          },
-        },
-      },
-    ],
-  })
+            value: 42
+          }
+        }
+      }
+    ]
+  });
 
   test(`x = y = 42;`, {
     type: 'Program',
@@ -30,22 +30,22 @@ module.exports = (test) => {
           operator: '=',
           left: {
             type: 'Identifier',
-            name: 'x',
+            name: 'x'
           },
           right: {
             type: 'AssignmentExpression',
             operator: '=',
             left: {
               type: 'Identifier',
-              name: 'y',
+              name: 'y'
             },
             right: {
               type: 'NumericLiteral',
-              value: 42,
-            },
-          },
-        },
-      },
-    ],
-  })
-}
+              value: 42
+            }
+          }
+        }
+      }
+    ]
+  });
+};

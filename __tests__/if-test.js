@@ -14,7 +14,7 @@ module.exports = (test) => {
           type: 'IfStatement',
           test: {
             type: 'Identifier',
-            name: 'x',
+            name: 'x'
           },
           consequent: {
             type: 'BlockStatement',
@@ -26,15 +26,15 @@ module.exports = (test) => {
                   operator: '=',
                   left: {
                     type: 'Identifier',
-                    name: 'x',
+                    name: 'x'
                   },
                   right: {
                     type: 'NumericLiteral',
-                    value: 1,
-                  },
-                },
-              },
-            ],
+                    value: 1
+                  }
+                }
+              }
+            ]
           },
           alternate: {
             type: 'BlockStatement',
@@ -46,18 +46,18 @@ module.exports = (test) => {
                   operator: '=',
                   left: {
                     type: 'Identifier',
-                    name: 'x',
+                    name: 'x'
                   },
                   right: {
                     type: 'NumericLiteral',
-                    value: 2,
-                  },
-                },
-              },
-            ],
-          },
-        },
-      ],
+                    value: 2
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
     }
-  )
-}
+  );
+};

@@ -6,23 +6,23 @@ module.exports = (test) => {
       42;
     `,
     {
-      type: "Program",
+      type: 'Program',
       body: [
         {
-          type: "ExpressionStatement",
+          type: 'ExpressionStatement',
           expression: {
-            type: "StringLiteral",
-            value: "hello",
-          },
+            type: 'StringLiteral',
+            value: 'hello'
+          }
         },
         {
-          type: "ExpressionStatement",
+          type: 'ExpressionStatement',
           expression: {
-            type: "NumericLiteral",
-            value: 42,
-          },
-        },
-      ],
-    },
+            type: 'NumericLiteral',
+            value: 42
+          }
+        }
+      ]
+    }
   );
 };

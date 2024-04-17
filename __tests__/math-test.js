@@ -14,21 +14,21 @@ module.exports = (test) => {
             operator: '+',
             left: {
               type: 'NumericLiteral',
-              value: 3,
+              value: 3
             },
             right: {
               type: 'NumericLiteral',
-              value: 2,
-            },
+              value: 2
+            }
           },
           right: {
             type: 'NumericLiteral',
-            value: 2,
-          },
-        },
-      },
-    ],
-  })
+            value: 2
+          }
+        }
+      }
+    ]
+  });
 
   test(`2 * 2;`, {
     type: 'Program',
@@ -40,16 +40,16 @@ module.exports = (test) => {
           operator: '*',
           left: {
             type: 'NumericLiteral',
-            value: 2,
+            value: 2
           },
           right: {
             type: 'NumericLiteral',
-            value: 2,
-          },
-        },
-      },
-    ],
-  })
+            value: 2
+          }
+        }
+      }
+    ]
+  });
 
   test(`(2 + 2) * 2;`, {
     type: 'Program',
@@ -64,21 +64,21 @@ module.exports = (test) => {
             operator: '+',
             left: {
               type: 'NumericLiteral',
-              value: 2,
+              value: 2
             },
             right: {
               type: 'NumericLiteral',
-              value: 2,
-            },
+              value: 2
+            }
           },
           right: {
             type: 'NumericLiteral',
-            value: 2,
-          },
-        },
-      },
-    ],
-  })
+            value: 2
+          }
+        }
+      }
+    ]
+  });
 
   test(`2 * 2 * 2;`, {
     type: 'Program',
@@ -93,19 +93,19 @@ module.exports = (test) => {
             operator: '*',
             left: {
               type: 'NumericLiteral',
-              value: 2,
+              value: 2
             },
             right: {
               type: 'NumericLiteral',
-              value: 2,
-            },
+              value: 2
+            }
           },
           right: {
             type: 'NumericLiteral',
-            value: 2,
-          },
-        },
-      },
-    ],
-  })
-}
+            value: 2
+          }
+        }
+      }
+    ]
+  });
+};

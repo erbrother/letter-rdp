@@ -17,19 +17,19 @@ module.exports = (test) => {
               type: 'ExpressionStatement',
               expression: {
                 type: 'NumericLiteral',
-                value: 42,
-              },
+                value: 42
+              }
             },
             {
               type: 'ExpressionStatement',
               expression: {
                 type: 'StringLiteral',
-                value: 'hello',
-              },
-            },
-          ],
-        },
-      ],
+                value: 'hello'
+              }
+            }
+          ]
+        }
+      ]
     }
-  )
-}
+  );
+};

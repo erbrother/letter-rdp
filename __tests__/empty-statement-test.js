@@ -3,8 +3,8 @@ module.exports = (test) => {
     type: 'Program',
     body: [
       {
-        type: 'EmptyStatement',
-      },
-    ],
-  })
-}
+        type: 'EmptyStatement'
+      }
+    ]
+  });
+};

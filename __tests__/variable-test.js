@@ -10,17 +10,17 @@ module.exports = (test) => {
             type: 'VariableDeclaration',
             id: {
               type: 'Identifier',
-              name: 'x',
+              name: 'x'
             },
             init: {
               type: 'NumericLiteral',
-              value: 42,
-            },
-          },
-        ],
-      },
-    ],
-  })
+              value: 42
+            }
+          }
+        ]
+      }
+    ]
+  });
 
   // VariableStatement no init
   test(`let x;`, {
@@ -34,14 +34,14 @@ module.exports = (test) => {
             type: 'VariableDeclaration',
             id: {
               type: 'Identifier',
-              name: 'x',
+              name: 'x'
             },
-            init: null,
-          },
-        ],
-      },
-    ],
-  })
+            init: null
+          }
+        ]
+      }
+    ]
+  });
 
   // Multiple VariableDeclaration
   test(`let x, y = 42;`, {
@@ -55,25 +55,23 @@ module.exports = (test) => {
             type: 'VariableDeclaration',
             id: {
               type: 'Identifier',
-              name: 'x',
+              name: 'x'
             },
-            init: null,
+            init: null
           },
           {
             type: 'VariableDeclaration',
             id: {
               type: 'Identifier',
-              name: 'y',
+              name: 'y'
             },
             init: {
               type: 'NumericLiteral',
-              value: 42,
-            },
-          },
-        ],
-      },
-    ],
-  })
-
-  
-}
+              value: 42
+            }
+          }
+        ]
+      }
+    ]
+  });
+};

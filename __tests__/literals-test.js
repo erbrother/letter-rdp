@@ -7,11 +7,11 @@ module.exports = (test) => {
         type: 'ExpressionStatement',
         expression: {
           type: 'NumericLiteral',
-          value: 42,
-        },
-      },
-    ],
-  })
+          value: 42
+        }
+      }
+    ]
+  });
 
   // StringLiteral
   test(`"hello";`, {
@@ -21,11 +21,11 @@ module.exports = (test) => {
         type: 'ExpressionStatement',
         expression: {
           type: 'StringLiteral',
-          value: 'hello',
-        },
-      },
-    ],
-  })
+          value: 'hello'
+        }
+      }
+    ]
+  });
 
   // StringLiteral
   test(`'hello';`, {
@@ -35,9 +35,9 @@ module.exports = (test) => {
         type: 'ExpressionStatement',
         expression: {
           type: 'StringLiteral',
-          value: 'hello',
-        },
-      },
-    ],
-  })
-}
+          value: 'hello'
+        }
+      }
+    ]
+  });
+};
