@@ -29,6 +29,9 @@ const Spec = [
   [/^\blet\b/, 'let'],
   [/^\bif\b/, 'if'],
   [/^\belse\b/, 'else'],
+  [/^\btrue\b/, 'true'],
+  [/^\bfalse\b/, 'false'],
+  [/^\bnull\b/, 'null'],
 
   // --------------------
   // 1. NUMBER
@@ -37,6 +40,10 @@ const Spec = [
   // --------------------
   // Identifiers
   [/^\w+/, 'IDENTIFIER'],
+
+  // -------------------
+  // Equality operators: ==, !=, ===, !==
+  [/^[=!]=/, 'EQUALITY_OPERATOR'],
 
   // --------------------
   // Assigment operators: =, *=, /=, +=, -=,
@@ -51,6 +58,11 @@ const Spec = [
   // --------------
   // Relational operators: <, >, <=, >=
   [/^[><]=?/, 'RELATIONAL_OPERATOR'],
+
+  // --------------
+  // Logical operators: &&, ||, !
+  [/^&&/, 'LOGICAL_AND'],
+  [/^\|\|/, 'LOGICAL_OR'],
 
   // --------------------
   // 2. STRING

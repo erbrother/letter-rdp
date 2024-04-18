@@ -161,7 +161,7 @@ class Parser {
   }
 
   AssignmentExpression() {
-    const left = this.RelationalExpression();
+    const left = this.LogicalORExpression();
 
     if (!this._isAssignmentOperator(this._lookahead.type)) {
       return left;
@@ -169,14 +169,33 @@ class Parser {
 
     return {
       type: 'AssignmentExpression',
-      operator: this._eat(this._lookahead.type).value,
+      operator: this.AssignmentOperator().value,
       left: this._checkValidAssignmentTarget(left),
       right: this.AssignmentExpression()
     };
   }
 
+  LogicalORExpression() {
+    return this._logicalExpression('LogicalANDExpression', 'LOGICAL_OR');
+  }
+
   /**
-   * RELATIONAL_OPERATOR: '<' | '>' | '<=' | '>='
+   * LogicalExpression: 逻辑表达式
+   * 逻辑运算符：'&&' | '||'
+   * x && y
+   *
+   * @returns
+   */
+  LogicalANDExpression() {
+    return this._logicalExpression('EqualityExpression', 'LOGICAL_AND');
+  }
+
+  EqualityExpression() {
+    return this._BinaryExpression('RelationalExpression', 'EQUALITY_OPERATOR');
+  }
+
+  /**
+   * RELATIONAL_OPERATOR: '<' | '>' | '<=' | '>=' 关系表达式
    *
    * x > y
    *
@@ -190,7 +209,7 @@ class Parser {
    * x = 1;
    *
    */
-  LeftHandSideEexpression() {
+  LeftHandSideExpression() {
     return this.Identifier();
   }
 
@@ -227,6 +246,14 @@ class Parser {
     return tokenType === 'SIMPLE_ASSIGN' || tokenType === 'COMPLEX_ASSIGN';
   }
 
+  AssignmentOperator() {
+    if (this._lookahead.type === 'SIMPLE_ASSIGN') {
+      return this._eat('SIMPLE_ASSIGN');
+    }
+
+    return this._eat('COMPLEX_ASSIGN');
+  }
+
   AddtiveExpression() {
     return this._BinaryExpression(
       'MultiplicativeExpression',
@@ -241,6 +268,26 @@ class Parser {
     );
   }
 
+  _logicalExpression(builder, operatorToken) {
+    let left = this[builder]();
+
+    while (this._lookahead.type === operatorToken) {
+      const operator = this._eat(operatorToken).value;
+
+      const right = this[builder]();
+
+      left = {
+        type: 'LogicalExpression',
+        operator,
+        left,
+        right
+      };
+    }
+
+    return left;
+  }
+
+  // 二元表达式
   _BinaryExpression(builder, operatorToken) {
     let left = this[builder]();
 
@@ -271,7 +318,7 @@ class Parser {
       case '(':
         return this.ParenthesizedExpression();
       default:
-        return this.LeftHandSideEexpression();
+        return this.LeftHandSideExpression();
     }
   }
 
@@ -281,7 +328,11 @@ class Parser {
    */
   _isLiteral(tokenType) {
     return (
-      this._lookahead.type === 'NUMBER' || this._lookahead.type === 'STRING'
+      tokenType === 'NUMBER' ||
+      tokenType === 'STRING' ||
+      tokenType === 'true' ||
+      tokenType === 'false' ||
+      tokenType === 'null'
     );
   }
 
@@ -295,12 +346,26 @@ class Parser {
     return expression;
   }
 
+  /**
+   * Literal
+   *  : NumericLiteral
+   *  | StringLiteral
+   *  | BooleanLiteral
+   *  | NullLiteral
+   * ;
+   */
   Literal() {
     switch (this._lookahead.type) {
       case 'NUMBER':
         return this.NumericLiteral();
       case 'STRING':
         return this.StringLiteral();
+      case 'true':
+        return this.BooleanLiteral(true);
+      case 'false':
+        return this.BooleanLiteral(false);
+      case 'null':
+        return this.NullLiteral();
     }
 
     throw new SyntaxError('Unexpected token: ' + this._lookahead.value);
@@ -321,6 +386,24 @@ class Parser {
     return {
       type: 'StringLiteral',
       value: token.value.slice(1, -1)
+    };
+  }
+
+  BooleanLiteral(value) {
+    this._eat(value ? 'true' : 'false');
+
+    return {
+      type: 'BooleanLiteral',
+      value
+    };
+  }
+
+  NullLiteral() {
+    this._eat('null');
+
+    return {
+      type: 'NullLiteral',
+      value: null
     };
   }
 

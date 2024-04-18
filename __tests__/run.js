@@ -13,18 +13,17 @@ const tests = [
   // require('./math-test.js'),
   // require('./assignment-test.js'),
   // require('./variable-test.js'),
-  require('./if-test.js')
+  // require('./if-test.js'),
+  // require('./relational.js'),
+  // require('./equality-test.js'),
+  require('./logical-test.js')
 ];
 
 const parser = new Parser();
 
 function exec() {
   const program = `
-    if (x  + 10 > 10) {
-      x = 0;
-    } else {
-      x += 1;
-    }
+    x > 5 && y < 10;
   `;
 
   const ast = parser.parse(program);
@@ -45,4 +44,4 @@ tests.forEach((testRun) => testRun(test));
 console.log('success !!!');
 
 // Manual test
-exec();
+// exec()
