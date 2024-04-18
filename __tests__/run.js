@@ -16,14 +16,15 @@ const tests = [
   // require('./if-test.js'),
   // require('./relational.js'),
   // require('./equality-test.js'),
-  require('./logical-test.js')
+  // require('./logical-test.js'),
+  require('./unary-test.js')
 ];
 
 const parser = new Parser();
 
 function exec() {
   const program = `
-    x > 5 && y < 10;
+    --x;
   `;
 
   const ast = parser.parse(program);
@@ -44,4 +45,4 @@ tests.forEach((testRun) => testRun(test));
 console.log('success !!!');
 
 // Manual test
-// exec()
+exec();

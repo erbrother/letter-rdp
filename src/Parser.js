@@ -206,11 +206,41 @@ class Parser {
   }
 
   /**
+   * UnaryExpression: 一元表达式
+   * 一元运算符：'+' | '-' | '++' | '--' | '!' | '~'
+   * : LeftHandSideExpression
+   *  | ADDITIVE_OPERATOR UnaryExpression
+   *  | LOGICAL_NOT UnaryExpression
+   */
+  UnaryExpression() {
+    let operator;
+
+    switch (this._lookahead.type) {
+      case 'ADDITIVE_OPERATOR':
+        operator = this._eat('ADDITIVE_OPERATOR').value;
+        break;
+      case 'LOGICAL_NOT':
+        operator = this._eat('LOGICAL_NOT').value;
+        break;
+    }
+
+    if (operator != null) {
+      return {
+        type: 'UnaryExpression',
+        operator,
+        argument: this.UnaryExpression()
+      };
+    }
+
+    return this.LeftHandSideExpression();
+  }
+
+  /**
    * x = 1;
    *
    */
   LeftHandSideExpression() {
-    return this.Identifier();
+    return this.PrimaryExpression();
   }
 
   /**
@@ -262,10 +292,7 @@ class Parser {
   }
 
   MultiplicativeExpression() {
-    return this._BinaryExpression(
-      'PrimaryExpression',
-      'MULTIPLICATIVE_OPERATOR'
-    );
+    return this._BinaryExpression('UnaryExpression', 'MULTIPLICATIVE_OPERATOR');
   }
 
   _logicalExpression(builder, operatorToken) {
@@ -317,6 +344,8 @@ class Parser {
     switch (this._lookahead.type) {
       case '(':
         return this.ParenthesizedExpression();
+      case 'IDENTIFIER':
+        return this.Identifier();
       default:
         return this.LeftHandSideExpression();
     }
