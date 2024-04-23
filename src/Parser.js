@@ -48,8 +48,119 @@ class Parser {
         return this.BlockStatement();
       case 'let':
         return this.VariableStatement();
+      case 'while':
+      case 'do':
+      case 'for':
+        return this.IterationStatement();
       default:
         return this.ExpressionStatement();
+    }
+  }
+
+  /**
+   * IterationStatement() 函数用来解析循环语句。
+   * : WhileStatement
+   *  | DoWhileStatement
+   *  | ForStatement
+   * @returns
+   */
+  IterationStatement() {
+    switch (this._lookahead.type) {
+      case 'while':
+        return this.WhileStatement();
+      case 'do':
+        return this.DoWhileStatement();
+      case 'for':
+        return this.ForStatement();
+    }
+  }
+
+  /**
+   * WhileStatement() 函数用来解析 while 语句。
+   * : 'while' '(' Expression ')' Statement
+   * ;
+   */
+  WhileStatement() {
+    this._eat('while');
+
+    this._eat('(');
+
+    const test = this.Expression();
+
+    this._eat(')');
+
+    const body = this.Statement();
+
+    return {
+      type: 'WhileStatement',
+      test,
+      body
+    };
+  }
+
+  /**
+   * DoWhileStatement() 函数用来解析 do-while 语句。
+   * : 'do' Statement 'while' '(' Expression ')' ';'
+   */
+  DoWhileStatement() {
+    this._eat('do');
+
+    const body = this.Statement();
+
+    this._eat('while');
+
+    this._eat('(');
+
+    const test = this.Expression();
+
+    this._eat(')');
+
+    this._eat(';');
+
+    return {
+      type: 'DoWhileStatement',
+      body,
+      test
+    };
+  }
+
+  /**
+   * ForStatement() 函数用来解析 for 语句。
+   * : 'for' '(' Expression? ';' Expression? ';' Expression? ')' Statement
+   */
+  ForStatement() {
+    this._eat('for');
+
+    this._eat('(');
+
+    const init = this._lookahead.type === ';' ? null : this.ForStatementInit();
+
+    this._eat(';');
+
+    const test = this._lookahead.type === ';' ? null : this.Expression();
+
+    this._eat(';');
+
+    const update = this._lookahead.type === ')' ? null : this.Expression();
+
+    this._eat(')');
+
+    const body = this.Statement();
+
+    return {
+      type: 'ForStatement',
+      init,
+      test,
+      update,
+      body
+    };
+  }
+
+  ForStatementInit() {
+    if (this._lookahead.type === 'let') {
+      return this.VariableStatementInit();
+    } else {
+      return this.Expression();
     }
   }
 
@@ -82,18 +193,22 @@ class Parser {
     };
   }
 
-  VariableStatement() {
+  VariableStatementInit() {
     this._eat('let');
-
     const declarations = this.VariableDeclarationList();
-
-    this._eat(';');
 
     return {
       type: 'VariableStatement',
-      kind: 'let',
       declarations
     };
+  }
+
+  VariableStatement() {
+    const variableStatement = this.VariableStatementInit();
+
+    this._eat(';');
+
+    return variableStatement;
   }
 
   VariableDeclarationList() {

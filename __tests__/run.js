@@ -17,14 +17,16 @@ const tests = [
   // require('./relational.js'),
   // require('./equality-test.js'),
   // require('./logical-test.js'),
-  require('./unary-test.js')
+  // require('./unary-test.js'),
+  require('./while-test.js'),
+  require('./do-while-test.js')
 ];
 
 const parser = new Parser();
 
 function exec() {
   const program = `
-    --x;
+    for (;;) {}
   `;
 
   const ast = parser.parse(program);
