@@ -48,6 +48,10 @@ class Parser {
         return this.BlockStatement();
       case 'let':
         return this.VariableStatement();
+      case 'return':
+        return this.ReturnStatement();
+      case 'def':
+        return this.FunctionDeclaration();
       case 'while':
       case 'do':
       case 'for':
@@ -55,6 +59,66 @@ class Parser {
       default:
         return this.ExpressionStatement();
     }
+  }
+
+  /**
+   * FunctionDeclaration() 函数用来解析函数声明。
+   * : 'def' Identifier '(' FormalParameters ')' BlockStatement
+   */
+  FunctionDeclaration() {
+    this._eat('def');
+
+    const name = this.Identifier();
+
+    this._eat('(');
+
+    const params = this._lookahead.type !== ')' ? this.FormalParameters() : [];
+
+    this._eat(')');
+
+    const body = this.BlockStatement();
+
+    return {
+      type: 'FunctionDeclaration',
+      name,
+      params,
+      body
+    };
+  }
+
+  /**
+   * FormalParameters() 函数用来解析形参。
+   * : Identifier (',' Identifier)*
+   * @returns
+   */
+  FormalParameters() {
+    const params = [this.Identifier()];
+
+    while (this._lookahead.type === ',') {
+      this._eat(',');
+
+      params.push(this.Identifier());
+    }
+
+    return params;
+  }
+
+  /**
+   * ReturnStatement() 函数用来解析 return 语句。
+   * : 'return' Expression ';'
+   */
+
+  ReturnStatement() {
+    this._eat('return');
+
+    const argument = this._lookahead.type !== ';' ? this.Expression() : null;
+
+    this._eat(';');
+
+    return {
+      type: 'ReturnStatement',
+      argument
+    };
   }
 
   /**
