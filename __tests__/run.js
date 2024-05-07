@@ -14,20 +14,28 @@ const tests = [
   // require('./assignment-test.js'),
   // require('./variable-test.js'),
   // require('./if-test.js'),
-  // require('./relational.js'),
+  // require('./relational-test.js'),
   // require('./equality-test.js'),
   // require('./logical-test.js'),
   // require('./unary-test.js'),
-  require('./while-test.js'),
-  require('./do-while-test.js'),
-  require('./function-declaration-test.js')
+  // require('./while-test.js'),
+  // require('./do-while-test.js'),
+  // require('./function-declaration-test.js'),
+  require('./member-test.js'),
 ];
 
 const parser = new Parser();
 
 function exec() {
   const program = `
-    for (;;) {}
+    let s = "Hello, world!";
+    let i = 0;
+
+    while (i < s.length) {
+      s[i];
+      // console.log(i, s[i]);
+      i += 1;
+    }
   `;
 
   const ast = parser.parse(program);
