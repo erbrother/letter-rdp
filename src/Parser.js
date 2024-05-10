@@ -419,7 +419,54 @@ class Parser {
    *
    */
   LeftHandSideExpression() {
-    return this.MemberExpression();
+    return this.CallMemberExpression();
+  }
+
+  CallMemberExpression() {
+    //  Member part, might be part of a CallExpression
+    const member = this.MemberExpression();
+
+    // See if we have a call expression:
+    if (this._lookahead.type === '(') {
+      return this._CallExpression(member);
+    }
+
+    // Simple member expression
+    return member;
+  }
+
+  _CallExpression(callee) {
+    let callExpression = {
+      type: 'CallExpression',
+      callee,
+      arguments: this.Arguments()
+    };
+
+    if (this._lookahead.type === '(') {
+      callExpression = this._CallExpression(callExpression);
+    }
+
+    return callExpression;
+  }
+
+  Arguments() {
+    this._eat('(');
+
+    const args = this._lookahead.type !== ')' ? this.ArgumentList() : [];
+
+    this._eat(')');
+
+    return args;
+  }
+
+  ArgumentList() {
+    const argumentList = [];
+
+    do {
+      argumentList.push(this.AssignmentExpression());
+    } while (this._lookahead.type === ',' && this._eat(','));
+
+    return argumentList;
   }
 
   MemberExpression() {
@@ -434,7 +481,7 @@ class Parser {
           type: 'MemberExpression',
           computed: false,
           object,
-          property:property
+          property: property
         };
       }
 
