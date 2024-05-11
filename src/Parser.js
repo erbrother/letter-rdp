@@ -52,6 +52,8 @@ class Parser {
         return this.ReturnStatement();
       case 'def':
         return this.FunctionDeclaration();
+      case 'class':
+        return this.ClassDeclaration();
       case 'while':
       case 'do':
       case 'for':
@@ -59,6 +61,34 @@ class Parser {
       default:
         return this.ExpressionStatement();
     }
+  }
+
+  /**
+   * ClassDeclaration() 函数用来解析类声明。
+   * : 'class' Identifier OptClassHeritage BlockStatement
+   */
+  ClassDeclaration() {
+    this._eat('class');
+
+    const id = this.Identifier();
+
+    const superClass =
+      this._lookahead.type === 'extends' ? this.ClassExtends() : null;
+
+    const body = this.BlockStatement();
+
+    return {
+      type: 'ClassDeclaration',
+      id,
+      superClass,
+      body
+    }
+  }
+
+  ClassExtends() {
+    this._eat('extends');
+
+    return this.Identifier();
   }
 
   /**
@@ -423,6 +453,11 @@ class Parser {
   }
 
   CallMemberExpression() {
+    // Super call;
+    if (this._lookahead.type === 'super') {
+      return this._CallExpression(this.Super());
+    }
+
     //  Member part, might be part of a CallExpression
     const member = this.MemberExpression();
 
@@ -607,6 +642,10 @@ class Parser {
         return this.ParenthesizedExpression();
       case 'IDENTIFIER':
         return this.Identifier();
+      case 'this':
+        return this.ThisExpression();
+      case 'new':
+        return this.NewExpression();
       default:
         return this.LeftHandSideExpression();
     }
@@ -634,6 +673,32 @@ class Parser {
     this._eat(')');
 
     return expression;
+  }
+
+  NewExpression() {
+    this._eat('new');
+
+    return {
+      type: 'NewExpression',
+      callee: this.MemberExpression(),
+      arguments: this.Arguments()
+    }
+  }
+
+  ThisExpression() {
+    this._eat('this');
+
+    return {
+      type: 'ThisExpression'
+    };
+  }
+
+  Super() {
+    this._eat('super');
+
+    return {
+      type: 'Super'
+    };
   }
 
   /**
